@@ -26,7 +26,7 @@ enum INI_OPT {
     INIO_NONE = 0, // no options specified
     INIO_SPACE_AROUND_DELIM = 1 << 0, // allow spaces around delimiters, i.e. name = val rather than name=val
     INIO_ALLOW_EMPTY = 1 << 1, // allow empty values for keys
-    INIO_ALL = 0xFFFFFFFF, // allow all options
+    INIO_ALL = 0xFF, // allow all options
 };
 
 /*
