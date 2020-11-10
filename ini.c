@@ -31,31 +31,33 @@ struct inisection* makesection(char* name) {
     if (name == NULL) {
         return NULL;
     }
-    struct inisection* s = malloc(sizeof(struct inisection));
+    struct inisection* s = calloc(1, sizeof(struct inisection));
     if (s == NULL) {
-        perror("makesection: malloc");
+        perror("makesection: calloc");
         return NULL;
     }
     s->name = strdup(name);
     s->head = NULL;
+    s->next = NULL;
     return s;
 }
 
 struct inifile* makeini(int flags) {
-    struct inifile* f = malloc(sizeof(struct inipair));
+    struct inifile* f = calloc(1, sizeof(struct inifile));
     if (f == NULL) {
-        perror("makeini: malloc");
+        perror("makeini: calloc");
         return NULL;
     }
     f->head = NULL;
-    f->default_section = malloc(sizeof(struct inisection));
+    f->default_section = calloc(1, sizeof(struct inisection));
     if (f->default_section == NULL) {
-        perror("makeini: malloc");
+        perror("makeini: calloc");
         free(f);
         return NULL;
     }
     f->default_section->name = NULL;
     f->default_section->head = NULL;
+    f->default_section->next = NULL;
     f->flags = flags;
     return f;
 }
@@ -77,9 +79,9 @@ struct inipair* makepair(char* key, char* val) {
         return NULL;
     }
 
-    struct inipair* p = malloc(sizeof(struct inipair));
+    struct inipair* p = calloc(1, sizeof(struct inipair));
     if (p == NULL) {
-        perror("makepair: malloc");
+        perror("makepair: calloc");
         return NULL;
     }
     p->key = strdup(key);
