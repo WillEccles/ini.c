@@ -243,13 +243,12 @@ int loadinifromfile(struct inifile* inif, char* filename) {
   // default to inserting to the default section
   struct inisection* tmpsec = inif->default_section;
 
-  int rval = 0;
   while (!feof(infile) && !ferror(infile)) {
     if (tmpline != fgets(tmpline, 512, infile)) {
       continue;
     }
 
-    if (1 == (rval = sscanf(tmpline, " [%256[^]]]", tmpsection))) {
+    if (sscanf(tmpline, " [%256[^]]]", tmpsection) == 1) {
       // set the current section
       tmpsec = makesection(tmpsection);
       struct inisection* tmpsec2 = section_insert(inif, tmpsec);
@@ -261,7 +260,7 @@ int loadinifromfile(struct inifile* inif, char* filename) {
     }
 
     // check for both a key and a value
-    if (2 == (rval = sscanf(tmpline, keyvalfmt, tmpkey, tmpval))) {
+    if (sscanf(tmpline, keyvalfmt, tmpkey, tmpval) == 2) {
       // insert the new key/value pair into the current section
       pair_insert(tmpsec, makepair(tmpkey, tmpval));
       continue;
@@ -269,7 +268,7 @@ int loadinifromfile(struct inifile* inif, char* filename) {
 
     // check for a key with no value
     if (inif->flags & INIO_ALLOW_EMPTY) {
-      if (1 == (rval = sscanf(tmpline, " %256[^=; ] \n", tmpkey))) {
+      if (sscanf(tmpline, " %256[^=; ] \n", tmpkey) == 1) {
         pair_insert(tmpsec, makepair(tmpkey, NULL));
         continue;
       }
