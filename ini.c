@@ -19,6 +19,8 @@
  * limitations under the License.
  */
 
+#define _XOPEN_SOURCE 700
+
 #include "ini.h"
 
 #include <stdio.h>
