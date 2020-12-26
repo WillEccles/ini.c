@@ -1,5 +1,8 @@
 /*
- * ini.h
+ *  __         __
+ * |__|.-----.|__|  .----.
+ * |  ||     ||  |__|  __|
+ * |__||__|__||__|__|____|
  *
  * Copyright 2020 Will Eccles
  *
@@ -16,17 +19,21 @@
  * limitations under the License.
  */
 
-#ifndef INI_H
-#define INI_H
+#ifndef INI_H_
+#define INI_H_
 
 /*
  * Options for INI files. By default, options are assumed off.
  */
 enum INI_OPT {
-    INIO_NONE = 0, // no options specified
-    INIO_SPACE_AROUND_DELIM = 1 << 0, // allow spaces around delimiters, i.e. name = val rather than name=val
-    INIO_ALLOW_EMPTY = 1 << 1, // allow empty values for keys
-    INIO_ALL = 0xFF, // allow all options
+  // no options specified
+  INIO_NONE = 0,
+  // allow spaces around delimiters, i.e. name = val rather than name=val
+  INIO_SPACE_AROUND_DELIM = 1 << 0,
+  // allow empty values for keys
+  INIO_ALLOW_EMPTY = 1 << 1,
+  // allow all options
+  INIO_ALL = 0xFF,
 };
 
 /*
@@ -36,18 +43,18 @@ enum INI_OPT {
  * value, use pair_setval() or one of the other value-setting functions.
  */
 struct inipair {
-    struct inipair* next;
-    char* key;
-    char* val;
+  struct inipair* next;
+  char* key;
+  char* val;
 };
 
 /*
  * Section in an INI file.
  */
 struct inisection {
-    char* name;
-    struct inipair* head;
-    struct inisection* next;
+  char* name;
+  struct inipair* head;
+  struct inisection* next;
 };
 
 /*
@@ -60,9 +67,12 @@ struct inisection {
  * newinifromfile().
  */
 struct inifile {
-    struct inisection* head; // head of the list of sections, kept in alphabetical
-    struct inisection* default_section; // default section (options found before the first section)
-    int flags; // flags determining parsing behavior (see enum INI_OPT)
+  // head of the list of sections, kept in alphabetical
+  struct inisection* head;
+  // default section (options found before the first section)
+  struct inisection* default_section;
+  // flags determining parsing behavior (see enum INI_OPT)
+  int flags;
 };
 
 /*
@@ -139,14 +149,16 @@ extern struct inisection* ini_getsection(struct inifile* ini, char* name);
  * the default section of the file.
  * Any other error results in NULL being returned.
  */
-extern struct inipair* inisection_getpair(struct inisection* section, char* key);
+extern struct inipair* inisection_getpair(struct inisection* section,
+                                          char* key);
 
 /*
  * Attempts to find a key-value pair in an INI file given a section name and
  * key. If the section name is NULL, the default section is searched.
  * This is a wrapper around ini_getsection() and inisection_getpair().
  */
-extern struct inipair* ini_getpair(struct inifile* ini, char* section, char* key);
+extern struct inipair* ini_getpair(struct inifile* ini, char* section,
+                                   char* key);
 
 /*
  * Sets the value of a key-value pair. This is the only recommended way
@@ -161,13 +173,15 @@ extern char* pair_setval(struct inipair* pair, char* val);
  * key is not found, they will be created. NULL section implies default section.
  * Returns a pointer to the pair which contains the key, or NULL on error.
  */
-extern struct inipair* ini_put(struct inifile* ini, char* section, char* key, char* val);
+extern struct inipair* ini_put(struct inifile* ini, char* section, char* key,
+                               char* val);
 
 /*
  * Much like ini_put, except that if a section or key is not found, it will
  * not be created for you.
  */
-extern struct inipair* ini_set(struct inifile* ini, char* section, char* key, char* val);
+extern struct inipair* ini_set(struct inifile* ini, char* section, char* key,
+                               char* val);
 
 /*
  * Frees an entire INI file structure.
@@ -208,7 +222,8 @@ extern struct inipair* freepair(struct inipair* pair);
  * returned value is a pre-existing section with the same name.
  * If successful, the return value == sec.
  */
-extern struct inisection* section_insert(struct inifile* file, struct inisection* sec);
+extern struct inisection* section_insert(struct inifile* file,
+                                         struct inisection* sec);
 
 /*
  * Insert a pair into a section in an INI file.
@@ -217,10 +232,11 @@ extern struct inisection* section_insert(struct inifile* file, struct inisection
  * If the supplied value is alreaady found in the list, the existing one
  * will be freed and the new one will replace it.
  */
-extern struct inipair* pair_insert(struct inisection* sec, struct inipair* pair);
+extern struct inipair* pair_insert(struct inisection* sec,
+                                   struct inipair* pair);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
+#endif // INI_H_
